@@ -1,0 +1,16 @@
+version: 2
+sources:
+  - name: tlc_taxi_trips
+    description: "This is the source data for the taxi trips dataset."
+    meta:
+      external_location: >
+        (FROM read_parquet(
+          list_transform(
+            range(1, 13),
+            m -> './data/yellow_tripdata_2024-' || lpad(m::text, 2, '0') || '.parquet'
+          )
+        ))
+      formatter: oldstyle
+    tables:
+      - name: raw_yellow_tripdata
+        description: "This table contains the raw trip data for taxi rides."

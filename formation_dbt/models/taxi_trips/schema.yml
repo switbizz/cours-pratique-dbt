@@ -1,0 +1,108 @@
+version: 2
+
+models:
+  - name: transform
+    description: "Dataset des trajets en taxi jaune de New York au cours de l'année 2024"
+
+    columns:   
+      - name: tpep_pickup_datetime
+        description: "Date et heure d'enclenchement du taximètre."
+        data_tests:
+          - not_null
+
+      - name: tpep_dropoff_datetime
+        description: "Date et heure de désenclenchement du taximètre."
+        data_tests:
+          - not_null
+
+      - name: trip_duration_minutes
+        description: "Durée du trajet en minutes."
+        data_tests:
+          - not_null    
+
+      - name: trip_distance
+        description: "Distance parcourue en miles, mesurée par le taximètre." 
+        data_tests:
+          - not_null
+
+      - name: passenger_count
+        description: "Nombre de passagers dans le véhicule (valeur saisie par le chauffeur)."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+             arguments:
+              min_value: 1
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              arguments:
+                column_type: BIGINT
+
+      - name: payment_type
+        description: "mode de paiement"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Credit Card","Cash"]
+      
+      - name: store_and_fwd_flag
+        description: "Indicateur de stockage et de transfert"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["N"]
+
+      - name: PULocationID
+        description: "Identifiant de la zone de prise en charge du passager."
+        data_tests:
+          - not_null
+
+      - name: DOLocationID 
+        description: "Identifiant de la zone de fin de prise en charge du passager."
+        data_tests:
+          - not_null
+
+      - name: fare_amount
+        description: "Montant de la tarification du trajet."
+        data_tests:
+          - not_null
+
+      - name: total_amount
+        description: "Montant total du trajet."
+        data_tests:
+          - not_null
+        
+      - name: tip_amount
+        description: "Montant du pourboire."
+        data_tests:
+          - not_null
+    
+      - name: tolls_amount
+        description: "Montant des péages."
+        data_tests:
+          - not_null
+
+      - name: improvement_surcharge
+        description: "Montant de la surtaxe d'amélioration."
+        data_tests:
+          - not_null
+
+      - name: congestion_surcharge
+        description: "Montant de la surtaxe de congestion."
+        data_tests:
+          - not_null
+
+      - name: extra
+        description: "Montant extra du trajet."
+        data_tests:
+          - not_null
+
+      - name: mta_tax
+        description: "Montant taxe MTA"
+        data_tests:
+          - not_null
+
+      - name: Airport_fee
+        description: "Montant taxe airport"
+        data_tests:
+          - not_null
